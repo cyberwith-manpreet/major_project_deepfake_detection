@@ -1,2 +1,0 @@
-# major_project_deepfake_detection
-major project DEEPFAKE DETECTION USING TEMPORAL INCONSISTENCIES IN AUDIO VIDEO SIGNALS
