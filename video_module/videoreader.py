@@ -32,9 +32,6 @@ class VideoReader:
         if self.cap:
             self.cap.release()
 
-
-# ---------------- MAIN EXECUTION ---------------- #
-
 if __name__ == "__main__":
 
     video_path = input("👉 Enter the video path: ").strip()
