@@ -10,7 +10,7 @@ def extract_frames(video_path, output_folder="extracted_frames"):
     if not video_path.lower().endswith(".mp4"):
         raise ValueError("Only MP4 videos are supported")
 
-    
+
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     output_path = os.path.join(project_root, output_folder)
 
@@ -57,4 +57,3 @@ if __name__ == "__main__":
 
     except Exception as e:
         print("❌ Error:", e)
-
