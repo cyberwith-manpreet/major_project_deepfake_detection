@@ -1,0 +1,14 @@
+# Ignore virtual environment
+venv/
+
+# Ignore generated frame data
+extracted_frames/
+preprocessed_frames/
+
+# Ignore images
+*.jpg
+*.png
+
+# Ignore Python cache
+__pycache__/
+*.pyc
