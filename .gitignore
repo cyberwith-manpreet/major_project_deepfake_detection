@@ -12,3 +12,7 @@ preprocessed_frames/
 # python
 venv/
 __pycache__/
+uploads/
+extracted_frames/
+preprocessed_frames/
+audio_results/

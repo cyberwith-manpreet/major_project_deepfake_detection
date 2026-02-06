@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Upload Video for Analysis</h2>
+
+<form action="/analyze" method="post" enctype="multipart/form-data">
+    <label for="video">Select MP4 video:</label><br><br>
+
+    <input type="file" id="video" name="video" accept=".mp4" required>
+    <br><br>
+
+    <button type="submit">Run Detection</button>
+</form>
+
+{% endblock %}

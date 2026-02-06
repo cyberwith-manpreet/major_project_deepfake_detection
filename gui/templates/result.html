@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Detection Result</h2>
+
+{% if result.status %}
+    <p style="color:red;">
+        <strong>{{ result.status }}</strong><br>
+        {{ result.error }}
+    </p>
+{% else %}
+    <ul>
+        <li><strong>Video Motion Length:</strong> {{ result.video_motion_length }}</li>
+        <li><strong>Audio Silence Points:</strong> {{ result.audio_silence_points }}</li>
+        <li><strong>Mismatch Score:</strong> {{ result.mismatch_score }}</li>
+    </ul>
+
+    <h3>Final Decision</h3>
+    <p>
+        Label: <strong>{{ result.final_decision.label }}</strong><br>
+        Confidence: {{ result.final_decision.confidence_percent }}%
+    </p>
+{% endif %}
+
+<br>
+<a href="/">Analyze another video</a>
+
+{% endblock %}
