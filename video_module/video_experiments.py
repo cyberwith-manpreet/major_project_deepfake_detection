@@ -1,3 +1,4 @@
+import sys
 import os
 
 from video_module.videoreader import VideoReader
@@ -17,7 +18,6 @@ def process_single_video(video_path):
     props = video.get_video_properties()
     video.release()
 
-    
     print(f"\n🎥 Processing video: {video_name}")
     print(
         f"Frames: {props['total_frames']} | "
@@ -34,9 +34,7 @@ def process_single_video(video_path):
     return motion
 
 
-def run_experiments_from_folder():
-    folder_path = input("👉 Enter videos folder path: ").strip()
-
+def run_experiments_from_folder(folder_path):
     videos = [
         os.path.join(folder_path, f)
         for f in os.listdir(folder_path)
@@ -52,8 +50,21 @@ def run_experiments_from_folder():
     for k, v in results.items():
         print(f"{k} → motion array length: {len(v)}")
 
+    return results
 
+
+# -------- ENTRY POINT --------
 if __name__ == "__main__":
-    run_experiments_from_folder()
-    
+    if len(sys.argv) < 2:
+        print("❌ Please provide a FOLDER path containing videos")
+        sys.exit(1)
 
+    folder_path = sys.argv[1]
+
+    try:
+        print(f"Running video pipeline on folder: {folder_path}")
+        run_experiments_from_folder(folder_path)
+    except Exception as e:
+        print("VIDEO PIPELINE FAILED")
+        print(e)
+        sys.exit(1)

@@ -1,53 +1,43 @@
+import sys
 import os
 import numpy as np
 import librosa
 import soundfile as sf
 from moviepy import VideoFileClip
 
-# -----------------------------
-#  FOLDER STRUCTURE YOU SHOULD HAVE
-# -----------------------------
-# Deepfake_Project/
-# ├── videos/            <-- put all your input .mp4 files here
-# └── results/           <-- outputs will be stored here (created automatically)
-# -----------------------------
 
-INPUT_VIDEO_FOLDER = "videos"
-OUTPUT_FOLDER = "results"
-
+OUTPUT_FOLDER = "audio_results"
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
-def process_single_video(video_path, video_name):
-    """
-    This function applies the SAME logic as Files 1–4
-    but automatically for one video at a time.
-    """
 
-    print(f"\nProcessing: {video_name}")
+def process_single_video(video_path):
+    video_name = os.path.splitext(os.path.basename(video_path))[0]
+    print(f"\n🔊 Processing audio for: {video_name}")
 
-    # -------- FILE 1: Extract Audio --------
+    # -------- Extract Audio --------
     audio_wav = os.path.join(OUTPUT_FOLDER, video_name + "_audio.wav")
     video = VideoFileClip(video_path)
-    video.audio.write_audiofile(audio_wav)
+    video.audio.write_audiofile(audio_wav, logger=None)
 
-    # -------- FILE 2: Preprocess Audio --------
+    # -------- Load & Clean Audio --------
     y, sr = librosa.load(audio_wav, sr=16000, mono=True)
-    y = y / np.max(np.abs(y))          # normalize
-    y = y - np.mean(y)                 # basic noise reduction
+
+    if np.max(np.abs(y)) != 0:
+        y = y / np.max(np.abs(y))      # normalize
+
+    y = y - np.mean(y)                 # simple noise reduction
 
     clean_audio = os.path.join(OUTPUT_FOLDER, video_name + "_clean.wav")
     sf.write(clean_audio, y, sr)
 
-    # -------- FILE 3: Energy Features --------
+    # -------- Energy Feature --------
     frame_size = 2048
     hop_size = 512
 
     energy = []
-    for i in range(0, len(y), hop_size):
-        frame = y[i:i+frame_size]
-        if len(frame) < frame_size:
-            break
-        e = np.sum(frame**2)
+    for i in range(0, len(y) - frame_size, hop_size):
+        frame = y[i:i + frame_size]
+        e = np.sum(frame ** 2)
         energy.append(e)
 
     energy = np.array(energy)
@@ -55,32 +45,58 @@ def process_single_video(video_path, video_name):
     energy_file = os.path.join(OUTPUT_FOLDER, video_name + "_energy.txt")
     np.savetxt(energy_file, energy)
 
-    # -------- FILE 4: Silence Detection --------
-    threshold = np.mean(energy) * 0.5
-    silence_flags = (energy < threshold).astype(int)
+    # -------- Silence Detection --------
+    if len(energy) > 0:
+        threshold = np.mean(energy) * 0.5
+        silence_flags = (energy < threshold).astype(int)
+    else:
+        silence_flags = []
 
     silence_file = os.path.join(OUTPUT_FOLDER, video_name + "_silence.txt")
     np.savetxt(silence_file, silence_flags)
 
-    print(f"Finished: {video_name}")
-    print(f"Saved → audio, clean audio, energy, silence flags in {OUTPUT_FOLDER}\n")
+    print(f"✅ Audio processing complete for {video_name}")
+
+    return {
+        "energy_points": len(energy),
+        "silence_points": len(silence_flags)
+    }
 
 
-# ------------- MAIN BATCH LOOP -------------
+def run_experiments_from_folder(folder_path):
+    videos = [
+        os.path.join(folder_path, f)
+        for f in os.listdir(folder_path)
+        if f.lower().endswith(".mp4")
+    ]
+
+    if len(videos) == 0:
+        raise RuntimeError("No MP4 files found in the given folder")
+
+    results = {}
+
+    for video in videos:
+        results[os.path.basename(video)] = process_single_video(video)
+
+    print("\n📊 AUDIO FINAL RESULTS")
+    for k, v in results.items():
+        print(f"{k} → {v}")
+
+    return results
+
+
+# -------- ENTRY POINT --------
 if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("❌ Please provide a FOLDER path containing videos")
+        sys.exit(1)
 
-    video_files = [f for f in os.listdir(INPUT_VIDEO_FOLDER) if f.endswith(".mp4")]
+    folder_path = sys.argv[1]
 
-    if len(video_files) == 0:
-        print("No .mp4 files found in 'videos' folder!")
-        exit()
-
-    print(f"Found {len(video_files)} videos.\n")
-
-    for video in video_files:
-        full_path = os.path.join(INPUT_VIDEO_FOLDER, video)
-        name_without_ext = os.path.splitext(video)[0]
-
-        process_single_video(full_path, name_without_ext)
-
-    print("✅ BATCH PROCESSING COMPLETE!")
+    try:
+        print(f"Running audio pipeline on folder: {folder_path}")
+        run_experiments_from_folder(folder_path)
+    except Exception as e:
+        print("❌ AUDIO PIPELINE FAILED")
+        print(e)
+        sys.exit(1)
