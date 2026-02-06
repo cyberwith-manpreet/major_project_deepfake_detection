@@ -1,6 +1,9 @@
+
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+os.makedirs("uploads", exist_ok=True)
 
 from flask import Flask, request
 from gui.pipeline_runner import run_full_pipeline
@@ -32,7 +35,7 @@ def analyze():
     save_path = os.path.join(UPLOAD_FOLDER, file.filename)
     file.save(save_path)
 
-    result = run_full_pipeline(UPLOAD_FOLDER)
+    result = run_full_pipeline(save_path)
 
     return f"""
     <h3>Result</h3>
