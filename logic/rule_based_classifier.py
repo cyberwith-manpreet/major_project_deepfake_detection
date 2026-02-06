@@ -41,6 +41,7 @@ def run_classifier(mismatch_score, decision_threshold=0.6):
     }
 
 # Testing the module
+
 if __name__ == "__main__":
     print("Testing rule-based classifier...")
 

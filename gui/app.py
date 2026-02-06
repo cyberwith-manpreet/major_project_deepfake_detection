@@ -1,45 +1,42 @@
-from flask import Flask, request
-import os
 import sys
-
-# allow python to access project root
+import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from flask import Flask, request
+
 
 from gui.pipeline_runner import run_full_pipeline
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = "video_inputs"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 @app.route("/")
 def home():
-    return '''
-    <h2>Deepfake Detection System (Pipeline Execution)</h2>
-
-    <form method="POST" action="/run_pipeline" enctype="multipart/form-data">
+    return """
+    <h2>Deepfake Detection System (Phase-2)</h2>
+    <form method="POST" action="/analyze" enctype="multipart/form-data">
         <input type="file" name="file" required>
         <br><br>
-        <input type="submit" value="Run Full Pipeline">
+        <button type="submit">Run Detection</button>
     </form>
-    '''
+    """
 
 
-@app.route("/run_pipeline", methods=["POST"])
-def run_pipeline():
+@app.route("/analyze", methods=["POST"])
+def analyze():
     file = request.files["file"]
+    save_path = os.path.join(UPLOAD_FOLDER, file.filename)
+    file.save(save_path)
 
-    if not os.path.exists(UPLOAD_FOLDER):
-        os.makedirs(UPLOAD_FOLDER)
-
-    video_path = os.path.join(UPLOAD_FOLDER, file.filename)
-    file.save(video_path)
-
-    results = run_full_pipeline(video_path)
+    result = run_full_pipeline(UPLOAD_FOLDER)
 
     return f"""
-    <h3>Pipeline Execution Result</h3>
-    <pre>{results}</pre>
+    <h3>Result</h3>
+    <pre>{result}</pre>
+    <a href="/">Analyze another video</a>
     """
 
 
