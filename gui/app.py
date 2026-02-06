@@ -3,6 +3,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from flask import Flask, request
+from gui.pipeline_runner import run_full_pipeline
 
 
 from gui.pipeline_runner import run_full_pipeline
