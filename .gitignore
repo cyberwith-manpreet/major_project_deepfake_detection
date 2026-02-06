@@ -1,14 +1,14 @@
-# Ignore virtual environment
-venv/
-
-# Ignore generated frame data
+# runtime folders
+uploads/
+audio_results/
 extracted_frames/
 preprocessed_frames/
 
-# Ignore images
-*.jpg
-*.png
+# media
+*.mp4
+*.wav
+*.txt
 
-# Ignore Python cache
+# python
+venv/
 __pycache__/
-*.pyc
