@@ -7,9 +7,7 @@ from logic.rule_based_classifier import run_classifier
 
 
 def generate_sample_data():
-    """
-    Generate simulated audio/video feature sequences.
-    """
+    
     np.random.seed(42)
 
     base_signal = np.sin(np.linspace(0, 10, 120))
