@@ -4,10 +4,7 @@ import numpy as np
 
 
 def calculate_motion_array(input_folder="preprocessed_frames"):
-    """
-    Reads consecutive frames, subtracts pixel values,
-    and returns an array of motion (frame difference values)
-    """
+   
 
     
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
