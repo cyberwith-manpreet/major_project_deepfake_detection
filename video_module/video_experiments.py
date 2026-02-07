@@ -45,7 +45,7 @@ def process_single_video(video_path):
     return motion
 
 
-# ---- CLI TESTING ONLY (NOT USED BY GUI) ----
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python -m video_module.video_experiments <video.mp4>")
