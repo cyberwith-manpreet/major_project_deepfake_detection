@@ -15,7 +15,7 @@ def process_single_video(video_path):
     print(f"\n🔊 Processing audio for: {video_name}")
 
     try:
-        # -------- Extract Audio --------
+       
         audio_wav = os.path.join(OUTPUT_FOLDER, video_name + "_audio.wav")
 
         video = VideoFileClip(video_path)
@@ -24,7 +24,7 @@ def process_single_video(video_path):
 
         video.audio.write_audiofile(audio_wav, logger=None)
 
-        # -------- Load & Clean Audio --------
+      
         y, sr = librosa.load(audio_wav, sr=16000, mono=True)
 
         if len(y) == 0:
@@ -38,7 +38,7 @@ def process_single_video(video_path):
         clean_audio = os.path.join(OUTPUT_FOLDER, video_name + "_clean.wav")
         sf.write(clean_audio, y, sr)
 
-        # -------- Energy Feature --------
+      
         frame_size = 2048
         hop_size = 512
 
@@ -50,7 +50,7 @@ def process_single_video(video_path):
 
         energy = np.array(energy)
 
-        # -------- Silence Detection --------
+     
         threshold = np.mean(energy) * 0.5 if len(energy) > 0 else 0
         silence_flags = (energy < threshold).astype(int)
 
@@ -62,7 +62,7 @@ def process_single_video(video_path):
         }
 
     except Exception as e:
-        # 🔥 SAFE FALLBACK (never crash pipeline)
+      
         print(f"⚠️ Audio fallback used for {video_name}: {e}")
 
         return {
@@ -93,7 +93,7 @@ def run_experiments_from_folder(folder_path):
     return results
 
 
-# -------- CLI ENTRY POINT --------
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("❌ Please provide a FOLDER path containing videos")
