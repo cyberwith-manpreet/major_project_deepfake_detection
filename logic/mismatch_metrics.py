@@ -1,28 +1,17 @@
 # mismatch_metrics.py
-"""
-Compute mismatch metrics between aligned audio and video signals.
 
-Outputs:
-1. Absolute difference
-2. Squared difference
-3. Moving average difference
-"""
 
 import numpy as np
 
 
 def validate_inputs(audio_seq, video_seq):
-    """
-    Ensure both sequences have equal length.
-    """
+   
     if len(audio_seq) != len(video_seq):
         raise ValueError("Audio and video sequences must be aligned and equal in length.")
 
 
 def absolute_difference(audio_seq, video_seq):
-    """
-    Compute element-wise absolute difference.
-    """
+   
     audio_seq = np.array(audio_seq, dtype=float)
     video_seq = np.array(video_seq, dtype=float)
 
@@ -32,9 +21,7 @@ def absolute_difference(audio_seq, video_seq):
 
 
 def squared_difference(audio_seq, video_seq):
-    """
-    Compute element-wise squared difference.
-    """
+    
     audio_seq = np.array(audio_seq, dtype=float)
     video_seq = np.array(video_seq, dtype=float)
 
@@ -44,9 +31,7 @@ def squared_difference(audio_seq, video_seq):
 
 
 def moving_average_difference(audio_seq, video_seq, window_size=5):
-    """
-    Compute moving average of absolute differences.
-    """
+  
     abs_diff = absolute_difference(audio_seq, video_seq)
 
     if window_size <= 1:
@@ -58,11 +43,7 @@ def moving_average_difference(audio_seq, video_seq, window_size=5):
     return moving_avg
 
 
-def compute_all_metrics(audio_seq, video_seq, window_size=5):
-    """
-    Compute all mismatch metrics together.
-    Returns a dictionary of results.
-    """
+de
     abs_diff = absolute_difference(audio_seq, video_seq)
     sq_diff = squared_difference(audio_seq, video_seq)
     mov_avg_diff = moving_average_difference(audio_seq, video_seq, window_size)
@@ -74,9 +55,7 @@ def compute_all_metrics(audio_seq, video_seq, window_size=5):
     }
 
 
-# ------------------------------
-# Example test
-# ------------------------------
+
 if __name__ == "__main__":
     print("Testing mismatch metrics...")
 
