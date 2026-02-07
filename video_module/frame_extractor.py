@@ -3,11 +3,11 @@ import os
 
 
 def extract_frames(video_path, output_folder):
-    # Validate MP4
+   
     if not video_path.lower().endswith(".mp4"):
         raise ValueError("Only MP4 videos are supported")
 
-    # Create output folder if not exists
+   
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
