@@ -1,8 +1,6 @@
 import numpy as np
 def trim_to_min_length(audio_seq, video_seq):
-    """
-    Trim both sequences to the minimum common length.
-    """
+  
     min_len = min(len(audio_seq), len(video_seq))
 
     audio_trimmed = audio_seq[:min_len]
@@ -12,9 +10,7 @@ def trim_to_min_length(audio_seq, video_seq):
 
 
 def stretch_sequence(seq, target_length):
-    """
-    Stretch (resample) a sequence to match target length using interpolation.
-    """
+  
     if len(seq) == target_length:
         return seq
 
@@ -27,9 +23,7 @@ def stretch_sequence(seq, target_length):
 
 
 def match_lengths_by_stretch(audio_seq, video_seq):
-    """
-    Stretch the shorter sequence to match the longer one.
-    """
+
     len_audio = len(audio_seq)
     len_video = len(video_seq)
 
@@ -42,10 +36,7 @@ def match_lengths_by_stretch(audio_seq, video_seq):
 
 
 def generate_index_mapping(audio_len, video_len):
-    """
-    Create index mapping between audio and video timelines.
-    Useful for syncing timestamps.
-    """
+  
     audio_indices = np.linspace(0, audio_len - 1, num=max(audio_len, video_len))
     video_indices = np.linspace(0, video_len - 1, num=max(audio_len, video_len))
 
@@ -53,17 +44,7 @@ def generate_index_mapping(audio_len, video_len):
 
 
 def align_signals(audio_seq, video_seq, method="stretch"):
-    """
-    Main alignment function.
-
-    Parameters:
-        audio_seq (list or np.array)
-        video_seq (list or np.array)
-        method: "trim" or "stretch"
-
-    Returns:
-        aligned_audio, aligned_video, index_map
-    """
+  
 
     audio_seq = np.array(audio_seq, dtype=float)
     video_seq = np.array(video_seq, dtype=float)
