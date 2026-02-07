@@ -2,12 +2,7 @@ import numpy as np
 from logic.mismatch_metrics import absolute_difference
 
 def shift_sequence(seq, shift):
-    """
-    Shift sequence left/right with zero padding.
-
-    shift > 0 → shift right
-    shift < 0 → shift left
-    """
+  
     seq = np.array(seq, dtype=float)
 
     if shift == 0:
@@ -24,20 +19,13 @@ def shift_sequence(seq, shift):
 
 
 def compute_total_mismatch(audio_seq, video_seq):
-    """
-    Compute total mismatch score.
-    """
+    
     diff = absolute_difference(audio_seq, video_seq)
     return np.mean(diff)
 
 
 def find_best_shift(audio_seq, video_seq, max_shift=10):
-    """
-    Try multiple shifts and find the best alignment.
-
-    Returns:
-    best_shift, best_score
-    """
+ 
     audio_seq = np.array(audio_seq, dtype=float)
     video_seq = np.array(video_seq, dtype=float)
 
@@ -63,9 +51,7 @@ def find_best_shift(audio_seq, video_seq, max_shift=10):
 
 
 def tune_threshold(audio_seq, video_seq, max_shift=10):
-    """
-    Wrapper function for tuning.
-    """
+  
     best_shift, best_score, scores = find_best_shift(
         audio_seq,
         video_seq,
