@@ -5,15 +5,15 @@ from logic.rule_based_classifier import run_classifier
 
 def run_full_pipeline(video_path):
     try:
-        # -------- VIDEO PIPELINE --------
+      
         motion_array = process_single_video(video_path)
         video_motion_length = len(motion_array)
 
-        # -------- AUDIO PIPELINE --------
+        
         audio_result = process_audio(video_path)
         audio_silence_points = audio_result["silence_points"]
 
-        # -------- LOGIC --------
+        
         mismatch_score = abs(video_motion_length - audio_silence_points) / max(
             video_motion_length, audio_silence_points
         )
